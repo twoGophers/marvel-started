@@ -7,6 +7,7 @@ import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 import decoration from '../../resources/img/vision.png';
 import { Component } from "react";
 
+import Test from "../test/Test";
 class App extends Component  {
 
     state = {
@@ -40,6 +41,8 @@ class App extends Component  {
                     </div>
                     <img className="bg-decoration" src={decoration} alt="vision"/>
                 </main>
+
+                {/* <Test></Test> */}
             </div>
         )
     }
