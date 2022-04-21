@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect} from 'react';
 import Spinner from '../spiner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import MarvelService from '../../services/MarvelService';
@@ -7,26 +7,12 @@ import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
 const RandomChar = () => {
-    // state = {
-    //     char: {},
-    //     loading: true,
-    //     error: false
-    // }
 
-    const [char, setChar] = useState({});
+    const [char, setChar] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
     const marvelService = new MarvelService();
-
-    // componentDidMount() {
-    //     this.updateChar();
-    //     // this.timerId = setInterval(this.updateChar, 15000);
-    // }
-
-    // componentWillUnmount() {
-    //     clearInterval(this.timerId);
-    // }
 
     useEffect(() => {
         updateChar();
@@ -38,33 +24,21 @@ const RandomChar = () => {
     }, [])
 
     const onCharLoaded = (char) => {
-        // this.setState({
-        //     char, 
-        //     loading: false
-        // })
-        setChar(char => char);
-        setLoading(loading => false);
+        setLoading(false);
+        setChar(char);
     }
 
     const onCharLoading = () => {
-        // this.setState({
-        //     loading: true
-        // })
-
-        setLoading(loading => true);
+        setLoading(true);
     }
 
     const onError = () => {
-        // this.setState({
-        //     loading: false,
-        //     error: true
-        // })
-        setLoading(loading => false);
-        setError(error => true);
+        setError(true);
+        setLoading(false);
     }
 
     const updateChar = () => {
-        const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
+        const id = Math.floor(Math.random() * (1011400 - 1011000)) + 1011000;
         onCharLoading();
         marvelService
             .getCharacter(id)
@@ -72,10 +46,9 @@ const RandomChar = () => {
             .catch(onError);
     }
 
-    // const {char, loading, error} = this.state;
     const errorMessage = error ? <ErrorMessage/> : null;
     const spinner = loading ? <Spinner/> : null;
-    const content = !(loading || error) ? <View char={char}/> : null;
+    const content = !(loading || error || !char) ? <View char={char} /> : null;
 
     return (
         <div className="randomchar">
@@ -106,20 +79,13 @@ const View = ({char}) => {
         imgStyle = {'objectFit' : 'contain'};
     }
 
-    let content = '';
-    if(description) {
-        content = description.slice(0, 250).concat('...');
-    } else {
-        content = 'Перейдите по ссылке ниже'
-    }
-
     return (
         <div className="randomchar__block">
             <img src={thumbnail} alt="Random character" className="randomchar__img" style={imgStyle}/>
             <div className="randomchar__info">
                 <p className="randomchar__name">{name}</p>
                 <p className="randomchar__descr">
-                    {content}
+                    {description}
                 </p>
                 <div className="randomchar__btns">
                     <a href={homepage} className="button button__main">
